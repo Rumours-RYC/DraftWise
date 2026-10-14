@@ -5,9 +5,7 @@ import base64
 import io
 from typing import Any
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+
 import numpy as np
 import pandas as pd
 
@@ -71,12 +69,16 @@ def chart_to_data_uri(fig) -> str:
     buf = io.BytesIO()
     fig.tight_layout()
     fig.savefig(buf, format="png", dpi=125, bbox_inches="tight")
+    import matplotlib.pyplot as plt
     plt.close(fig)
     return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
 
 
 def make_chart(df: pd.DataFrame, chart_type: str, x_column: str | None = None, y_column: str | None = None) -> str:
     """Create a PNG data URI from the actual data; raises ValueError on bad requests."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
     if chart_type == "missing":
         vals = df.isna().sum().sort_values(ascending=False).head(20)
         fig, ax = plt.subplots(figsize=(10, 4.5))
