@@ -1,0 +1,7 @@
+
+department,sales,region,customer_rating
+Support,1200,North,4
+Sales,1800,South,5
+Support,950,East,3
+Sales,,North,4
+Marketing,1500,West,5

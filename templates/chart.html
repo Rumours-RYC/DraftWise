@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Chart · {{ metadata.name }} · DraftWise{% endblock %}
+{% block content %}
+<div class="breadcrumbs"><a href="{{ url_for('index') }}">Datasets</a> / <a href="{{ url_for('dataset_detail', dataset_id=metadata.dataset_id) }}">{{ metadata.name }}</a> / Chart</div>
+<section class="section"><p class="eyebrow">CUSTOM VISUALIZATION</p><h1>Chart result</h1>{% if error %}<div class="flash error">{{ error }}</div>{% endif %}{% if chart_uri %}<div class="large-chart"><img src="{{ chart_uri }}" alt="Generated chart"></div>{% endif %}<a class="button secondary" href="{{ url_for('dataset_detail', dataset_id=metadata.dataset_id) }}">Back to dataset</a></section>
+{% endblock %}

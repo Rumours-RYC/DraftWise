@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Dataset Analytics · DraftWise{% endblock %}
+{% block content %}
+<section class="hero-banner">
+  <div><p class="eyebrow">RESEARCH PROTOTYPE</p><h1>Draft analytics.<br><span>Data-driven insights.</span></h1><p class="lede">Import a CSV or Excel dataset to inspect its quality, explore charts, and generate descriptive insights — or analyze a Dota 2 draft with your trained classifiers.</p><div class="button-row"><a class="button primary" href="#upload">Import a dataset</a><a class="button secondary" href="{{ url_for('draft_builder') }}">Analyze a Dota 2 draft</a></div></div>
+  <div class="hero-stats"><div><strong>29,643</strong><span>Research matches</span></div><div><strong>2,996</strong><span>Model features</span></div><div><strong>2 models</strong><span>Decision Tree + Random Forest</span></div></div>
+</section>
+<section class="section" id="upload"><div class="section-heading"><div><p class="eyebrow">MODULE A</p><h2>Import a dataset</h2><p>CSV and XLSX · Stored in SQLite · Maximum upload size 16 MiB and 100,000 rows</p></div></div>
+  <form class="upload-panel" action="{{ url_for('upload_dataset') }}" method="post" enctype="multipart/form-data">
+    <label class="field-label" for="dataset_name">Dataset name <span class="muted">(optional)</span></label><input id="dataset_name" name="dataset_name" type="text" maxlength="120" placeholder="e.g. Student Survey Results">
+    <label class="field-label" for="file">Choose a CSV or Excel file</label><input id="file" name="file" type="file" accept=".csv,.xlsx" required>
+    <p class="hint">For Excel workbooks, this version imports the first worksheet and names it in the dataset details.</p>
+    <button class="button primary" type="submit">Upload and analyze</button>
+  </form>
+</section>
+<section class="section"><div class="section-heading"><div><p class="eyebrow">MODULE A</p><h2>Saved datasets</h2><p>Imported datasets remain available in the local SQLite database after application restarts.</p></div></div>
+{% if datasets %}<div class="dataset-grid">{% for ds in datasets %}<article class="dataset-card"><div class="dataset-type">{{ ds.file_type|upper }}</div><h3><a href="{{ url_for('dataset_detail', dataset_id=ds.dataset_id) }}">{{ ds.name }}</a></h3><p class="muted">{{ ds.original_filename }}</p><div class="dataset-numbers"><span><strong>{{ '{:,}'.format(ds.row_count) }}</strong> rows</span><span><strong>{{ '{:,}'.format(ds.column_count) }}</strong> columns</span></div><p class="small muted">{{ ds.uploaded_at }}</p><a class="text-link" href="{{ url_for('dataset_detail', dataset_id=ds.dataset_id) }}">Open analysis →</a></article>{% endfor %}</div>{% else %}<div class="empty-state"><span class="empty-icon">↥</span><h3>No datasets yet</h3><p>Upload a CSV or Excel file to create your first analytics workspace.</p></div>{% endif %}
+</section>
+<section class="section small-cards"><article><p class="eyebrow">MODULE B</p><h2>Dota 2 Draft Predictor</h2><p>Build a valid draft and compare the saved Decision Tree and Random Forest predictions.</p><a class="text-link" href="{{ url_for('draft_builder') }}">Open draft builder →</a></article><article><p class="eyebrow">RESEARCH</p><h2>Model Performance</h2><p>Review the reported baseline, evaluation metrics, and Random Forest feature importance.</p><a class="text-link" href="{{ url_for('research') }}">View research results →</a></article></section>
+{% endblock %}
